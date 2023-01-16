@@ -3,6 +3,7 @@ package com.alex.security.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity(securedEnabled = true)    // authorization
 public class SecurityConfiguration {
 
     // son final para q en aut los inyecte lombok x el @RequiredArgsConstructor
@@ -31,7 +33,7 @@ public class SecurityConfiguration {
             .csrf().disable()
             .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .and()
-            .authorizeHttpRequests().requestMatchers("/api/v1/auth/**").permitAll() //white list
+            .authorizeHttpRequests().requestMatchers("/api/v1/auth/**", "/api/v1/free/**").permitAll() //white list
             .anyRequest().authenticated()
             .and()
                 .sessionManagement()    // eliminar las sessiones para q con c/request se valide el auth

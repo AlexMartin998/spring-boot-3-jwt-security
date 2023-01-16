@@ -2,7 +2,6 @@ package com.alex.security.auth;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +45,7 @@ public class AuthenticationService {
 
         // // en este punto el email/pass are correct
         var user = repository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow();
         var jwtToken = jwtService.generateJwt(user);
 
         return AuthenticationResponse.builder().token(jwtToken).build();
