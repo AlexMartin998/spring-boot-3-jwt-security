@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:14.6
+    restart: unless-stopped
+    container_name: postgres-sql
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: mySecretPass23nsdf
+      POSTGRES_DB: spring_security
+      POSTGRES_USER: adrian
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+      # postgres    ->    /var/lib/postgresql/data
+      # mongo       ->    /data/db
+      # mysql       ->    /var/lib/mysql
+      # postgres    ->    /var/lib/postgresql/data
+
+
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '80:80'
+
+
+    # Connection: localhost:80
+      # host: postgres
+      # user: postgres
+
+volumes:
+  postgres:
