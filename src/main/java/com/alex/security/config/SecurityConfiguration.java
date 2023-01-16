@@ -9,6 +9,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.alex.security.auth.JwtAuthenticationEntryPoint;
+
 import lombok.RequiredArgsConstructor;
 
 // estas 2 @ deben ir juntas en Spring Boot 3.0
@@ -20,12 +22,15 @@ public class SecurityConfiguration {
     // son final para q en aut los inyecte lombok x el @RequiredArgsConstructor
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
             .csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .and()
             .authorizeHttpRequests().requestMatchers("/api/v1/auth/**").permitAll() //white list
             .anyRequest().authenticated()
             .and()
